@@ -6,6 +6,11 @@ function App() {
   const [pokemon, setPokemon] = useState(); // state for pokemon name
   const [pokemonData, setPokemonData] = useState({}); // state for pokemon data
   const [pokemonStatus, setPokemonStatus] = useState(false); // state for pokemon status
+
+  useEffect(() => {
+    // Code to run on component mount or update goes here.
+  }, [pokemon]); // Specify the dependencies for useEffect here.
+
   const searchPokemon = () => {
     axios
       .get(`https://pokeapi.co/api/v2/pokemon/${pokemon}`)
@@ -25,14 +30,11 @@ function App() {
       })
       .catch((error) => {
         console.error(error);
+        setPokemonStatus(false);
       });
 
     console.log(pokemonData);
   };
-  useEffect(() => {
-    
-  }, []);
-
   return (
     <div className="bg-gray-200 min-h-screen flex flex-col items-center justify-center">
       <div className="bg-yellow-400 text-gray-800 py-10 px-4 flex flex-col items-center justify-center mx-auto max-w-md rounded-lg shadow-lg">
@@ -58,19 +60,28 @@ function App() {
         <div className="text-center text-red-500 mt-4">
           <h1>Seach correct PokeMon</h1>
           <img
-            src="https://cdn.bulbagarden.net/upload/2/21/001Bulbasaur.png"
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
             alt="bulbasaur"
             className="w-24 h-24 mt-4"
           />
         </div>
       ) : (
         <div className="bg-yellow-400 text-gray-800 py-10 px-4 flex flex-col items-center justify-center mx-auto max-w-md rounded-lg shadow-lg mt-4">
-          <h1 className="text-4xl font-bold mb-6">{pokemonData.name}</h1>
+          <h1
+            id="heading"
+            className={`text-4xl font-bold mb-6 ${
+              pokemonStatus ? "fade-in" : ""
+            }`}
+          >
+            {pokemonData.name}
+          </h1>
           <img
+            id="image"
             src={pokemonData.image}
             alt="pokemon"
-            className="w-64 h-64 mb-6"
+            className={`w-64 h-64 mb-6 ${pokemonStatus ? "fade-in" : ""}`}
           />
+
           <div className="flex flex-col items-center justify-center">
             <div className="font-bold text-xl mb-2">
               Type: {pokemonData.type}
